@@ -12,9 +12,9 @@ module ColouredText
         .each.with_index {|c,i| define_method(c){ colorize(40+i)}}
 
     def debug()
-      "debug: ".green + self.gsub(/.(?=\w+\:)/,"\n   ")\
+      "debug: ".green + self.gsub(/(?=\b\w+\: )/,"\n   ")\
           .gsub(/(?<=\: )\w+/) {|x| x.green.bold }\
-          .gsub(/\w+\:/) {|x| ("%s" % x).cyan.bold} + "\n\n"
+          .gsub(/\w+\:(?= )/) {|x| ("%s" % x).cyan.bold} + "\n\n"
     end
 
     def warn()
