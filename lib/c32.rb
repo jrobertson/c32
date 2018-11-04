@@ -8,21 +8,23 @@ module ColouredText
 
     colours = %i(black red green brown blue magenta cyan gray)    
     colours.each.with_index {|c,i| define_method(c){ colorize(30+i)}}
-    bg_colours = colours.map {|c| ('bg_' + c.to_s).to_sym}
-    bg_colours.each.with_index {|c,i| define_method(c){ colorize(40+i)}}
+    bg_colours = colours.map {|c| ('bg_' + c.to_s).to_sym}\
+        .each.with_index {|c,i| define_method(c){ colorize(40+i)}}
 
     def debug()
-      "debug: ".green + self
+      "debug: ".green + self.gsub(/.(?=\w+\:)/,"\n   ")\
+          .gsub(/(?<=\: )\w+/) {|x| x.green.bold }\
+          .gsub(/\w+\:/) {|x| ("%s" % x).cyan.bold} + "\n\n"
     end
 
     def warn()
-      "warning: ".brown + Time.now.strftime("%H:%M:%S").gray + ' ' + self
+      "warning: ".brown + Time.now.strftime("%H:%M:%S").cyan + ' ' + self
     end
 
     alias warning warn
 
     def error()
-      "error: ".red + Time.now.strftime("%Y-%b-%d %H:%M").gray + ' ' + self
+      "error: ".red.bold + Time.now.strftime("%Y-%b-%d %H:%M").cyan + ' ' + self
     end
 
     alias err error
