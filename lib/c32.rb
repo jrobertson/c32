@@ -8,13 +8,18 @@ module ColouredText
 
     colours = %i(black red green brown blue magenta cyan gray)    
     colours.each.with_index {|c,i| define_method(c){ colorize(30+i)}}
+    
+    colours.each.with_index do |c,i|
+      define_method(('light_' + c.to_s).to_sym){ colorize(90+i)}
+    end
+    
     bg_colours = colours.map {|c| ('bg_' + c.to_s).to_sym}\
         .each.with_index {|c,i| define_method(c){ colorize(40+i)}}
 
     def debug()
-      "debug: ".green + self.gsub(/(?=\b\w+\: )/,"\n   ")\
-          .gsub(/(?<=\: )\w+/) {|x| x.green.bold }\
-          .gsub(/\w+\:(?= )/) {|x| ("%s" % x).cyan.bold} + "\n\n"
+      "debug: ".green + self.sub(/(?=\b[\S]+\: )/,"\n   ")\
+          .sub(/(?<=\: )\S+/) {|x| x.green.bold }\
+          .sub(/\S+\:(?= )/) {|x| ("%s" % x).cyan.bold} + "\n\n"
     end
 
     def warn()
