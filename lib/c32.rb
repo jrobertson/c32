@@ -13,8 +13,14 @@ module ColouredText
       define_method(('light_' + c.to_s).to_sym){ colorize(90+i)}
     end
     
-    bg_colours = colours.map {|c| ('bg_' + c.to_s).to_sym}\
-        .each.with_index {|c,i| define_method(c){ colorize(40+i)}}
+    colours.each.with_index do |c,i| 
+      define_method(('bg_' + c.to_s).to_sym){ colorize(40+i)}
+    end
+
+    colours.each.with_index do |c,i| 
+      define_method(('bg_light_' + c.to_s).to_sym){ colorize(100+i)}
+    end
+
 
     def debug()
       "debug: ".green + self.sub(/(?=\b[\S]+\: )/,"\n   ")\
